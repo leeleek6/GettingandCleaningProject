@@ -15,11 +15,21 @@ trainsubj <- read.delim("UCI HAR Dataset/train/subject_train.txt",header=FALSE)
 trainset <- cbind(trainx,trainy,trainsubj)
 colnames(trainset) <- c("set","label","subject")
 
-features <- read.delim("UCI HAR Dataset/features.txt",header = FALSE)
+features <- unlist(read.delim("UCI HAR Dataset/features.txt",header = FALSE))
 dat <- rbind(testset,trainset)
 
+#gets set column in dat formatted into separate numbers
+seprows <- function(column) {
+  out <- list()
+  for(i in 1:length(column)) {
+    temp <- unlist(strsplit(column[i], " "))
+    out[[i]] <- as.numeric(temp[-which(temp=="")])
+  }
+  out
+}
 
+newrows <- seprows(dat$set)
 
 
 #each set has a value for each feature
-tidygoof <- as.numeric(goof[[1]][-c(which(goof[[1]]==""))]) #goof is the set in a rows
+
