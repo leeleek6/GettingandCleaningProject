@@ -16,6 +16,10 @@ trainset <- cbind(trainx,trainy,trainsubj)
 colnames(trainset) <- c("set","label","subject")
 
 features <- unlist(read.delim("UCI HAR Dataset/features.txt",header = FALSE))
+features <- lapply(strsplit(features," "), function(l) l[[2]])
+activity <- unlist(read.delim("UCI HAR Dataset/activity_labels.txt",header=FALSE))
+activity <- lapply(strsplit(activity," "), function(l) l[[2]])
+
 dat <- rbind(testset,trainset)
 
 #gets set column in dat formatted into separate numbers
@@ -27,9 +31,9 @@ seprows <- function(column) {
   }
   out
 }
-
+#creates new table with each set in a row. each entry in a set is assigned to proper feature
 newrows <- seprows(dat$set)
+df <- data.frame(matrix(unlist(newrows), nrow=length(newrows), byrow=TRUE))
+colnames(df) <- features
 
-
-#each set has a value for each feature
 
