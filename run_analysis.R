@@ -11,15 +11,15 @@ testx <- read.delim("UCI HAR Dataset/test/X_test.txt", header = FALSE)
 testy <- read.delim("UCI HAR Dataset/test/Y_test.txt", header = FALSE)
 testy <- data.frame(unlist(activity)[as.factor(unlist(testy))])
 testsubj <- read.delim("UCI HAR Dataset/test/subject_test.txt",header=FALSE)
-testset <- cbind(testx,testy,testsubj)
-colnames(testset) <- c("dataset","activity","subject")
+testset <- cbind(testsubj,testy,testx)
+colnames(testset) <- c("subject","activity","dataset")
 
 trainx <- read.delim("UCI HAR Dataset/train/X_train.txt", header = FALSE)
 trainy <- read.delim("UCI HAR Dataset/train/Y_train.txt", header = FALSE)
 trainy <- data.frame(unlist(activity)[as.factor(unlist(trainy))])
 trainsubj <- read.delim("UCI HAR Dataset/train/subject_train.txt",header=FALSE)
-trainset <- cbind(trainx,trainy,trainsubj)
-colnames(trainset) <- c("dataset","activity","subject")
+trainset <- cbind(trainsubj,trainy,trainx)
+colnames(trainset) <- c("subject","activity","dataset")
 
 
 dat <- rbind(testset,trainset)
@@ -38,5 +38,4 @@ newrows <- seprows(dat$dataset)
 df <- data.frame(matrix(unlist(newrows), nrow=length(newrows), byrow=TRUE))
 colnames(df) <- features
 df <- select(df,contains("mean") | contains("std"))
-
-#unlist(activity)[as.factor(t)] fix
+vartable <- cbind(select(dat,subject,activity),df)
