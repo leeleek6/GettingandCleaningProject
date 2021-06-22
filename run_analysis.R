@@ -47,19 +47,18 @@ df <- data.frame(matrix(unlist(newrows), nrow=length(newrows), byrow=TRUE))
 colnames(df) <- features
 
 ##extracts variables for std and mean only
-df <- select(df,contains("mean") | contains("std"))
+df <- select(df,contains("mean()") | contains("std()"))
 vartable <- cbind(select(dat,subject,activity),df)
 
 
 ##descriptively renames variables
-colnames(vartable) <- sub("-mean","Mean",names(vartable))
-colnames(vartable) <- sub("-std","Std",names(vartable))
+colnames(vartable) <- sub("-mean\\()","Mean",names(vartable))
+colnames(vartable) <- sub("-std\\()","Std",names(vartable))
 colnames(vartable) <- sub("-X","X",names(vartable))
 colnames(vartable) <- sub("-Y","Y",names(vartable))
 colnames(vartable) <- sub("-Z","Z",names(vartable))
 colnames(vartable) <- sub("BodyBody","Body",names(vartable))
-colnames(vartable) <- sub("\\()","",names(vartable))
+#colnames(vartable) <- sub("\\()","",names(vartable))
 
 ##creates dataframe with average of each variable for each activity and subject
 means <- vartable %>% group_by(subject,activity) %>% summarize_all(list(mean))
-
